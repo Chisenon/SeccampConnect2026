@@ -1,0 +1,11 @@
+# Exclude the Rust build output from the Docker build context.
+# Without this, the entire target/ tree (can be several GB) would be
+# sent to the Docker daemon on every `docker build` / `docker compose up`.
+target/
+
+# Git history is not needed inside the image.
+.git/
+
+# Nix build artefacts
+result
+result-*
