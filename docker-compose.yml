@@ -12,14 +12,14 @@ services:
       # Persist downloaded crates across runs (speeds up re-builds).
       # Docker initialises these from the pre-fetched image layers on
       # first creation, so crates are available without a fresh download.
-      - cargo-registry:/root/.cargo/registry
-      - cargo-git:/root/.cargo/git
+      - cargo-registry:/home/builder/.cargo/registry
+      - cargo-git:/home/builder/.cargo/git
     working_dir: /work
-    # Default: release build.
-    # Override with:
-    #   docker compose run --rm build cargo build          (debug)
-    #   docker compose run --rm build cargo build --release (explicit release)
-    command: cargo build --release
+    stdin_open: true
+    tty: true
+    # Keep container running (like DEVContainer)
+    # Use: docker compose exec build cargo build --release
+    command: sleep infinity
 
 # Named volumes for cargo dependency cache.
 # Initialised automatically from the image's pre-fetched registry layer.

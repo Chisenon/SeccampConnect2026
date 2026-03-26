@@ -1,3 +1,4 @@
+//! Build script for SeccampConnect2026
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;

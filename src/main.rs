@@ -1,3 +1,4 @@
+//! SeccampConnect2026 - ESP32S3-based keyboard firmware using Vial
 #![no_std]
 #![no_main]
 
