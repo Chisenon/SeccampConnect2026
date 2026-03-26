@@ -34,7 +34,7 @@ use rmk::{HostResources, initialize_encoder_keymap_and_storage, run_devices, run
 use static_cell::StaticCell;
 use {esp_alloc as _, esp_backtrace as _};
 
-use crate::keymap::{ROW, COL};
+use crate::keymap::{COL, ROW};
 use crate::vial::{VIAL_KEYBOARD_DEF, VIAL_KEYBOARD_ID};
 
 ::esp_bootloader_esp_idf::esp_app_desc!();

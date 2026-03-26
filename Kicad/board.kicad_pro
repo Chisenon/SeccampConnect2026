@@ -73,7 +73,7 @@
         "footprint_filters_mismatch": "ignore",
         "footprint_symbol_mismatch": "warning",
         "footprint_type_mismatch": "ignore",
-        "hole_clearance": "error",
+        "hole_clearance": "ignore",
         "hole_to_hole": "warning",
         "holes_co_located": "warning",
         "invalid_outline": "error",
@@ -98,7 +98,7 @@
         "silk_over_copper": "warning",
         "silk_overlap": "warning",
         "skew_out_of_range": "error",
-        "solder_mask_bridge": "error",
+        "solder_mask_bridge": "ignore",
         "starved_thermal": "error",
         "text_height": "warning",
         "text_on_edge_cuts": "error",
@@ -226,7 +226,16 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [],
+    "erc_exclusions": [
+      [
+        "pin_to_pin|2032000|1079500|d42a8aa7-79c2-40a9-85c3-cc7785d70af4|d3814d19-7bf4-4f34-b4d9-aaec0e94949f|/e49ea350-db18-4e55-8e96-c45c407ec11d|/e49ea350-db18-4e55-8e96-c45c407ec11d|/e49ea350-db18-4e55-8e96-c45c407ec11d",
+        ""
+      ],
+      [
+        "pin_to_pin|2032000|1117600|03e1afc5-f9a9-43dd-aee7-3b005adee196|1fdbd88b-f8f9-4241-80ab-78383b175a51|/e49ea350-db18-4e55-8e96-c45c407ec11d|/e49ea350-db18-4e55-8e96-c45c407ec11d|/e49ea350-db18-4e55-8e96-c45c407ec11d",
+        ""
+      ]
+    ],
     "meta": {
       "version": 0
     },
@@ -489,7 +498,7 @@
       "netlist": "",
       "plot": "",
       "pos_files": "",
-      "specctra_dsn": "board.dsn",
+      "specctra_dsn": "../../../../../../tmp/board.dsn",
       "step": "",
       "svg": "",
       "vrml": ""

@@ -4,28 +4,37 @@ on:
   push:
     branches:
       - master
-  pull_request: null
+  pull_request:
+    branches:
+      - master
+      - develop
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
 
 jobs:
   rust:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/alignof/seccampconnect2026:latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: install clippy
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy
-
-      - uses: sksat/action-clippy@v1.0.0
-        if: github.event_name == 'push'
-        with:
-          reporter: github-check
-
-      - uses: sksat/action-clippy@v1.0.0
-        if: github.event_name == 'pull_request'
-        with:
-          reporter: github-pr-review
+      - name: Run clippy with reviewdog
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cargo clippy --all-features --message-format=json | \
+          clippy-reviewdog-filter | \
+          reviewdog -f=checkstyle \
+                    -name="clippy" \
+                    -reporter=${{ github.event_name == 'pull_request' && 'github-pr-review' || 'github-check' }} \
+                    -level=warning \
+                    -filter-mode=nofilter \
+                    -fail-on-error=false
 
       - name: format check
         run: cargo fmt --all -- --check

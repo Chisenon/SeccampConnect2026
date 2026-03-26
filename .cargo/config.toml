@@ -1,5 +1,5 @@
 [target.'cfg(all(any(target_arch = "riscv32", target_arch = "xtensa"), target_os = "none"))']
-runner = "espflash flash --monitor"
+runner = "espflash flash --monitor --after reset-watchdog"
 
 [build]
 target = "xtensa-esp32s3-none-elf"
@@ -18,4 +18,3 @@ ESP_LOG = "info"
 # Needed for nightly, until llvm upstream has support for Rust Xtensa.
 [unstable]
 build-std = ["alloc", "core"]
-
