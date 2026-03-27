@@ -1,0 +1,51 @@
+[env]
+CHIP = "esp32s3"
+# ELF path relative to the secure_bootloader directory
+ELF_PATH = "../target/xtensa-esp32s3-none-elf/release/SeccampConnect2026"
+BIN_NAME = "firmware.bin"
+SIGNED_BIN_NAME = "firmware_signed.bin"
+KEY_PATH = "secure_boot_signing_key.pem"
+# App partition offset (factory)
+OFFSET = "0x20000"
+
+[tasks.build]
+description = "Build the Rust project in release mode."
+command = "cargo"
+args = ["build", "--release"]
+
+[tasks.bin]
+description = "Convert the compiled ELF file to a binary image inside the secure_bootloader directory."
+cwd = "secure_bootloader"
+dependencies = ["build"]
+command = "esptool"
+args = ["--chip", "${CHIP}", "elf2image", "${ELF_PATH}", "-o", "${BIN_NAME}"]
+
+[tasks.sign]
+description = "Sign the binary image inside the secure_bootloader directory using the RSA-3072 key."
+cwd = "secure_bootloader"
+dependencies = ["bin"]
+command = "espsecure"
+args = [
+  "sign_data",
+  "--version",
+  "2",
+  "--keyfile",
+  "${KEY_PATH}",
+  "--output",
+  "${SIGNED_BIN_NAME}",
+  "${BIN_NAME}",
+]
+
+[tasks.flash]
+description = "Flash the signed binary from the secure_bootloader directory using --no-stub."
+cwd = "secure_bootloader"
+dependencies = ["sign"]
+command = "esptool"
+args = [
+  "--chip",
+  "${CHIP}",
+  "--no-stub",
+  "write_flash",
+  "${OFFSET}",
+  "${SIGNED_BIN_NAME}",
+]

@@ -21,6 +21,7 @@ rmk = { version = "0.8.2", default-features = false, features = [
   "log",
   "storage",
   "vial",
+  "controller",
 ] }
 embassy-executor = { version = "0.9" }
 esp-backtrace = { version = "0.18", features = [
@@ -38,6 +39,8 @@ esp-bootloader-esp-idf = { version = "0.4", features = ["esp32s3", "log-04"] }
 bt-hci = { version = "0.6" }
 rand_core = { version = "0.6", default-features = false }
 static_cell = "2"
+ssd1306 = { version = "0.10.0", features = ["async"] }
+embedded-graphics = "0.8.1"
 
 [build-dependencies]
 xz2 = "0.1.7"

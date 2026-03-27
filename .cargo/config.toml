@@ -1,5 +1,5 @@
 [target.'cfg(all(any(target_arch = "riscv32", target_arch = "xtensa"), target_os = "none"))']
-runner = "espflash flash --monitor --after reset-watchdog"
+runner = "espflash flash --monitor --after watchdog-reset"
 
 [build]
 target = "xtensa-esp32s3-none-elf"

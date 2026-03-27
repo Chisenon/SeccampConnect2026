@@ -1,4 +1,4 @@
-//! Build script for SeccampConnect2026
+//! build.rs - Generates vial config.
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
@@ -7,6 +7,7 @@ use std::{env, fs};
 use const_gen::{CompileConst, const_declaration};
 use xz2::read::XzEncoder;
 
+/// Watches `vial.json` and generate vial configuration.
 fn main() {
     // Generate vial config at the root of project
     println!("cargo:rerun-if-changed=vial.json");
@@ -18,6 +19,7 @@ fn main() {
     // println!("cargo:rustc-link-arg=-Tdefmt.x");
 }
 
+/// Generates Vial configuration from `vial.json`.
 fn generate_vial_config() {
     // Generated vial config file
     let out_file = Path::new(&env::var_os("OUT_DIR").unwrap()).join("config_generated.rs");
@@ -29,7 +31,7 @@ fn generate_vial_config() {
             file.read_to_string(&mut content)
                 .expect("Cannot read vial.json");
         }
-        Err(e) => println!("Cannot find vial.json {p:?}: {e}"),
+        Err(e) => println!("Cannot find vial.json {:?}: {e}", p.display()),
     }
 
     let vial_cfg = json::stringify(json::parse(&content).unwrap());
@@ -44,6 +46,8 @@ fn generate_vial_config() {
         const_declaration!(pub VIAL_KEYBOARD_ID = keyboard_id),
     ]
     .map(|s| "#[allow(clippy::redundant_static_lifetimes)]\n".to_owned() + s.as_str())
+    .map(|s| "#[allow(missing_docs)]\n".to_owned() + s.as_str())
+    .map(|s| "#[allow(clippy::missing_docs_in_private_items)]\n".to_owned() + s.as_str())
     .join("\n");
     fs::write(out_file, const_declarations).unwrap();
 }

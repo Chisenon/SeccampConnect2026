@@ -58,11 +58,13 @@
         # Toolchain dependencies used in both devShell and Docker image
         devDeps = with pkgs; [
           rust_toolchain_esp
-          esp-idf-s3-minimal.tools.xtensa-esp-elf
-          esp-idf-s3-minimal.tools.esp32ulp-elf
-          esp-idf-s3-minimal.tools.xtensa-esp-elf-gdb
+
+          esp-idf-s3-full
+
+          esptool
           espflash
           gitMinimal
+          cargo-make
 
           vial
         ];
@@ -74,6 +76,10 @@
         devShells.default = pkgs.mkShell {
           name = "ESP32S3";
           nativeBuildInputs = devDeps;
+          shellHook = ''
+            export IDF_PYTHON_CHECK_CONSTRAINTS=no
+            export IDF_PYTHON_CHECK_DONE=1
+          '';
         };
 
         # Docker image build

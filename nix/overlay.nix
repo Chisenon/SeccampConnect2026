@@ -12,4 +12,13 @@ final: prev: {
       "xtensa-esp-elf-gdb"
     ];
   };
+
+  esp-idf-s3-full = prev.esp-idf-xtensa.override {
+    toolsToInclude = [
+      "xtensa-esp-elf"
+      "esp32ulp-elf"
+      "openocd-esp32"
+      "esp-rom-elfs"
+    ];
+  };
 }

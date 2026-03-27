@@ -1,0 +1,6 @@
+build/
+sdkconfig.old
+firmware
+firmware.bin
+firmware_signed.bin
+secure_boot_signing_key.pem
