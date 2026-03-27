@@ -8,24 +8,24 @@
 
 use core::fmt::Write;
 use embedded_graphics::{
-    mono_font::{ascii::FONT_6X10, MonoTextStyleBuilder},
+    mono_font::{MonoTextStyleBuilder, ascii::FONT_6X10},
     pixelcolor::BinaryColor,
     prelude::*,
     text::{Baseline, Text},
 };
 use esp_hal::{
+    Async,
     gpio::{InputPin, OutputPin},
     i2c::master::{Config, I2c, Instance},
     time::Rate,
-    Async,
 };
 use rmk::channel::CONTROLLER_CHANNEL;
 use rmk::heapless::String;
 use ssd1306::{
-    mode::{BasicMode, DisplayConfigAsync, BufferedGraphicsModeAsync},
+    I2CDisplayInterface, Ssd1306Async,
+    mode::{BasicMode, BufferedGraphicsModeAsync, DisplayConfigAsync},
     prelude::{DisplayRotation, I2CInterface},
     size::DisplaySize128x32,
-    I2CDisplayInterface, Ssd1306Async,
 };
 
 /// The physical dimensions of the OLED display (128x32 pixels).
@@ -36,8 +36,11 @@ type DisplayInterface<'a> = I2CInterface<I2c<'a, Async>>;
 
 /// Type alias for the SSD1306 display instance in buffered graphics mode.
 /// This is the main type used for drawing operations.
-pub type OledDisplay<'a> =
-    Ssd1306Async<DisplayInterface<'a>, DisplaySize128x32, BufferedGraphicsModeAsync<DisplaySize128x32>>;
+pub type OledDisplay<'a> = Ssd1306Async<
+    DisplayInterface<'a>,
+    DisplaySize128x32,
+    BufferedGraphicsModeAsync<DisplaySize128x32>,
+>;
 
 /// Helper function to initialize the underlying I2C peripheral and the basic SSD1306 interface.
 ///
@@ -76,17 +79,18 @@ fn init_oled_base<'a>(
 /// # Returns
 ///
 /// Returns a fully initialized `OledDisplay` instance ready for drawing commands.
+/// If `Ssd1306Async<>.init()` fails, it returns `None`.
 pub async fn init_oled<'a>(
     i2c0: impl Instance + 'a,
     sda: impl InputPin + OutputPin + 'a,
     scl: impl InputPin + OutputPin + 'a,
     rotation: DisplayRotation,
-) -> OledDisplay<'a> {
+) -> Option<OledDisplay<'a>> {
     let mut display = init_oled_base(i2c0, sda, scl, rotation).into_buffered_graphics_mode();
-    display.init().await.unwrap();
+    display.init().await.ok()?;
     display.clear_buffer();
     display.flush().await.unwrap();
-    display
+    Some(display)
 }
 
 /// Main asynchronous task for managing the OLED display.
@@ -108,8 +112,13 @@ pub async fn oled_task(mut display: OledDisplay<'static>) {
         .build();
 
     // 2. Display the startup logo.
-    let _ = Text::with_baseline("seccamp connect 2026", Point::new(0, 0), text_style, Baseline::Top)
-        .draw(&mut display);
+    let _ = Text::with_baseline(
+        "seccamp connect 2026",
+        Point::new(0, 0),
+        text_style,
+        Baseline::Top,
+    )
+    .draw(&mut display);
     let _ = display.flush().await;
 
     // Create subscriber for receiving event from RMK core.
@@ -124,8 +133,13 @@ pub async fn oled_task(mut display: OledDisplay<'static>) {
         display.clear_buffer();
 
         // Draw fixed text.
-        let _ = Text::with_baseline("seccamp connect 2026", Point::new(0, 0), text_style, Baseline::Top)
-            .draw(&mut display);
+        let _ = Text::with_baseline(
+            "seccamp connect 2026",
+            Point::new(0, 0),
+            text_style,
+            Baseline::Top,
+        )
+        .draw(&mut display);
 
         // Format current layer information.
         let mut buf = String::<32>::new();

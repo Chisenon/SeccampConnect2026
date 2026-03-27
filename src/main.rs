@@ -9,6 +9,7 @@
 //! - Vial support
 //! - Low profile with 17 mm pitch
 //! - Integrated rotary encoder and 0.91-inch OLED
+
 #![no_std]
 #![no_main]
 
@@ -105,7 +106,9 @@ async fn main(spawner: Spawner) {
         DisplayRotation::Rotate0,
     )
     .await;
-    spawner.spawn(oled::oled_task(display)).unwrap();
+    if let Some(display) = display {
+        spawner.spawn(oled::oled_task(display)).unwrap();
+    }
 
     // Initialize the IO pins
     let (row_pins, col_pins) = config_matrix_pins_esp!(peripherals: peripherals, input: [GPIO4, GPIO7, GPIO1], output: [GPIO8, GPIO9, GPIO3, GPIO2]);
