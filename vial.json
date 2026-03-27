@@ -3,6 +3,9 @@
   "vendorId": "0x4C4B",
   "productId": "0x4643",
   "lighting": "none",
+  "vial": {
+    "midi": "advanced"
+  },
   "matrix": {
     "rows": 3,
     "cols": 4

@@ -67,6 +67,7 @@ WORKDIR /work
 RUN chown -R builder:builder /work
 USER builder
 COPY Cargo.toml build.rs rust-toolchain.toml ./
+COPY rmk ./rmk
 # Create a stub main so `cargo fetch` succeeds without the real source.
 RUN mkdir -p src && echo 'fn main(){}' > src/main.rs
 RUN . /home/builder/export-esp.sh && cargo fetch

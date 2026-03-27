@@ -16,7 +16,7 @@ missing_docs = "warn"
 missing_crate_level_docs = "warn"
 
 [dependencies]
-rmk = { version = "0.8.2", default-features = false, features = [
+rmk = { path = "rmk/rmk", default-features = false, features = [
   "esp32s3_ble",
   "log",
   "storage",

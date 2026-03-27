@@ -1,0 +1,32 @@
+{
+  "name": "rmk-rspress",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "node fetch-docs.js",
+    "build": "rspress build",
+    "check": "prettier .",
+    "dev": "rspress dev",
+    "format": "prettier . --write",
+    "preview": "rspress preview"
+  },
+  "dependencies": {
+    "rspress": "^1.40.2"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.400",
+    "@iconify/tailwind4": "^1.0.6",
+    "@tailwindcss/postcss": "^4.1.16",
+    "@types/node": "^18.11.17",
+    "@types/react": "^19.2.2",
+    "prettier": "3.6.2",
+    "rspress-plugin-sitemap": "^1.2.1",
+    "tailwindcss": "^4.1.16"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "core-js"
+    ]
+  }
+}
