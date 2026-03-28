@@ -22,4 +22,26 @@ target
 
 Kicad/jlcpcb/gerber/
 Kicad/jlcpcb/production_files/
+secure_bootloader_backup/
+
 result
+
+# ESP-IDF / secure_bootloader build artifacts
+secure_bootloader/build/
+secure_bootloader/log/
+secure_bootloader/sdkconfig
+secure_bootloader/sdkconfig.old
+
+# Generated binaries and firmware
+secure_bootloader/*.bin
+secure_bootloader/*.elf
+secure_bootloader/firmware
+secure_bootloader/firmware_signed.bin
+
+# Secure boot keys (sensitive - should not be committed)
+secure_bootloader/secure_boot_signing_key*.pem
+secure_bootloader/*/signing_key*.pem
+
+# CMake build cache
+secure_bootloader/CMakeCache.txt
+secure_bootloader/CMakeFiles/

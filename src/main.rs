@@ -122,7 +122,7 @@ async fn main(spawner: Spawner) {
     };
     let device_config = DeviceConfig {
         manufacturer: "RMK",
-        product_name: "my Keyboard",
+        product_name: "one Keyboard",
         ..Default::default()
     };
     let rmk_config = RmkConfig {
